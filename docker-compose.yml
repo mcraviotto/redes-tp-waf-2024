@@ -1,6 +1,42 @@
 version: '3.8'
 
+volumes:
+  dvwa:
+
+networks:
+  dvwa:
+
 services:
+  webapp1:
+    image: tataabancens/juice-shop:1.0
+    ports:
+      - "3000:3000"
+  
+  webapp2:
+    image: ghcr.io/digininja/dvwa:latest
+    environment:
+      - DB_SERVER=db
+    depends_on:
+      - db
+    networks:
+      - dvwa
+    ports:
+      - 127.0.0.1:4280:80
+    restart: unless-stopped
+
+  db:
+    image: docker.io/library/mariadb:10
+    environment:
+      - MYSQL_ROOT_PASSWORD=dvwa
+      - MYSQL_DATABASE=dvwa
+      - MYSQL_USER=dvwa
+      - MYSQL_PASSWORD=p@ssw0rd
+    volumes:
+      - dvwa:/var/lib/mysql
+    networks:
+      - dvwa
+    restart: unless-stopped
+
   reverse-proxy:
     # build: .
     image: tataabancens/reverse-proxy:1.0
@@ -11,13 +47,5 @@ services:
       - ./modsecurity.conf:/etc/nginx/modsecurity.conf
       - ./rules:/etc/nginx/rules
     depends_on:
-      - backend
-
-  backend:
-    # image: ac1197298bd4 # Usa la imagen de tu servidor backend
-    # build:
-    #   context: ./juice-shop
-    #   dockerfile: Dockerfile
-    image: tataabancens/juice-shop:1.0
-    ports:
-      - "3000:3000"
+      - webapp1
+      - webapp2
