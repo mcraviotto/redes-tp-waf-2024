@@ -1,5 +1,5 @@
 FROM node:20-buster as installer
-COPY . /juice-shop
+RUN git clone https://github.com/juice-shop/juice-shop.git
 WORKDIR /juice-shop
 RUN npm i -g typescript ts-node
 RUN npm install --omit=dev --unsafe-perm
