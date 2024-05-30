@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./modsecurity.conf:/etc/nginx/modsecurity.conf
+      - ./rules:/etc/nginx/rules
+    depends_on:
+      - backend
+
+  backend:
+    image: ac1197298bd4 # Usa la imagen de tu servidor backend
+    ports:
+      - "3000:3000"
