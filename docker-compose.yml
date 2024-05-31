@@ -1,10 +1,10 @@
 version: '3.8'
 
-volumes:
-  dvwa:
+# volumes:
+#   dvwa:
 
-networks:
-  dvwa:
+# networks:
+#   dvwa:
 
 services:
   webapp1:
@@ -18,11 +18,10 @@ services:
       - DB_SERVER=db
     depends_on:
       - db
-    networks:
-      - dvwa
+    # networks:
+    #   - dvwa
     ports:
-      - 127.0.0.1:4280:80
-    restart: unless-stopped
+      - "4280:80"
 
   db:
     image: docker.io/library/mariadb:10
@@ -31,10 +30,10 @@ services:
       - MYSQL_DATABASE=dvwa
       - MYSQL_USER=dvwa
       - MYSQL_PASSWORD=p@ssw0rd
-    volumes:
-      - dvwa:/var/lib/mysql
-    networks:
-      - dvwa
+    # volumes:
+    #   - dvwa:/var/lib/mysql
+    # networks:
+    #   - dvwa
     restart: unless-stopped
 
   reverse-proxy:
