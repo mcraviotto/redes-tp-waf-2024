@@ -1,11 +1,5 @@
 version: '3.8'
 
-# volumes:
-#   dvwa:
-
-# networks:
-#   dvwa:
-
 services:
   webapp1:
     image: tataabancens/juice-shop:1.0
@@ -18,8 +12,6 @@ services:
       - DB_SERVER=db
     depends_on:
       - db
-    # networks:
-    #   - dvwa
     ports:
       - "4280:80"
 
@@ -30,14 +22,9 @@ services:
       - MYSQL_DATABASE=dvwa
       - MYSQL_USER=dvwa
       - MYSQL_PASSWORD=p@ssw0rd
-    # volumes:
-    #   - dvwa:/var/lib/mysql
-    # networks:
-    #   - dvwa
     restart: unless-stopped
 
   reverse-proxy:
-    # build: .
     image: tataabancens/reverse-proxy:1.0
     ports:
       - "80:80"
